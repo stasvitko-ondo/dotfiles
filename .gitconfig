@@ -2,7 +2,7 @@
 	name = Stanislav Vitko
 	email = stas@vitko.me
 	#signingkey = 4CD382FEF5B60088
-	signingkey = 0x48F22A464791F054
+	signingKey = /Users/stasvitko/.ssh/id_ed25519_sk.pub
 
 [color]
 	diff = auto
@@ -89,7 +89,7 @@
 [mergetool]
 	prompt = false
 [commit]
-	gpgsign = true
+	gpgSign = true
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
@@ -99,3 +99,7 @@
 	rebase = false
 [init]
 	defaultBranch = master
+[gpg]
+	format = ssh
+[tag]
+	gpgSign = true
