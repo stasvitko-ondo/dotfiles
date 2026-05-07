@@ -2,6 +2,11 @@
 # zmodload zsh/zprof
 
 
+if [[ -t 1 && -z "$INSIDE_FISH" ]]; then
+    export INSIDE_FISH=1
+    exec fish
+fi
+
 # workaround for TRAMP in emacs
 [[ $TERM == "dumb" ]] && unsetopt zle && PS1='$ ' && return
 
@@ -182,16 +187,16 @@ setopt INC_APPEND_HISTORY
 # https://www.atlassian.com/git/tutorials/dotfiles
 alias config='git --git-dir=$HOME/.dotfiles.git/ --work-tree=$HOME'
 
-# gpg stuff if started locally
-if [[ -z $SSH_CONNECTION ]]; then
-    export GPG_TTY="$(tty)"
-    export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
-    gpgconf --launch gpg-agent
-else
-    if [ -S ~/.gnupg/S.gpg-agent-remote.ssh ]; then
-        export SSH_AUTH_SOCK=~/.gnupg/S.gpg-agent-remote.ssh
-    fi
-fi
+# # gpg stuff if started locally
+# if [[ -z $SSH_CONNECTION ]]; then
+#     export GPG_TTY="$(tty)"
+#     export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
+#     gpgconf --launch gpg-agent
+# else
+#     if [ -S ~/.gnupg/S.gpg-agent-remote.ssh ]; then
+#         export SSH_AUTH_SOCK=~/.gnupg/S.gpg-agent-remote.ssh
+#     fi
+# fi
 
 # check if exa exists and set alias
 if command "exa" >/dev/null 2>&1; then
@@ -213,7 +218,7 @@ function y() {
     local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
     yazi "$@" --cwd-file="$tmp"
     if cwd="$(command cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
-	builtin cd -- "$cwd"
+        builtin cd -- "$cwd"
     fi
     rm -f -- "$tmp"
 }
@@ -224,9 +229,17 @@ alias clj="clj -A:user"
 
 # Created by `pipx` on 2023-12-01 22:17:21
 export PATH="$PATH:/Users/vist/.local/bin"
-eval "$(/opt/homebrew/bin/mise activate zsh)"
+
+# mise
+[[ $- != *i* ]] && eval "$(mise activate zsh --shims)" # sets up non-interactive sessions
+[[ $- == *i* ]] && eval "$(mise activate zsh)"         # sets up interactive sessions
 
 
+# krew
+export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
+
+# update diff
+export KUBECTL_EXTERNAL_DIFF="dyff between --omit-header --set-exit-code"
 
 # print profile information
 # zprof
