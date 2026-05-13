@@ -1,5 +1,6 @@
 # This file contains fish universal variable definitions.
 # VERSION: 3.0
 SETUVAR --export EDITOR:emacsclient\x20\x2dnw
+SETUVAR --export KUBECTL_EXTERNAL_DIFF:dyff\x20between\x20\x2d\x2domit\x2dheader\x20\x2d\x2dset\x2dexit\x2dcode
 SETUVAR __fish_initialized:4300
 SETUVAR fish_user_paths:/opt/homebrew/bin\x1e/Users/stasvitko/bin
